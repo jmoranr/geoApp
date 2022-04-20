@@ -1,4 +1,3 @@
-from crypt import methods
 import os
 from flask import Flask, jsonify
 import model
@@ -84,6 +83,16 @@ def timeSeries(inputPoint, inputDate):
             return wrongDateErr
     else:
         return wrongPointErr
+
+@app.route('/madrid/<inputDate>/', methods=['GET'])
+def madrid(inputDate):
+    if dateValidation(inputDate):
+        return jsonify({
+            'title': 'TOTAL COMUNIDAD DE MADRID',
+            'data': model.madrid(conn(), inputDate)
+        })
+    else:
+        return wrongDateErr
 
 
 app.run(host='0.0.0.0', port=os.getenv('PORT'))

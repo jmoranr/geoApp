@@ -1,12 +1,3 @@
-# FROM python:latest
-# RUN mkdir /usr/src/app/
-# COPY . /usr/src/app/
-# WORKDIR /usr/src/app/
-# RUN pip install psycopg2-binary
-# RUN pip install flask
-# EXPOSE 5000
-# CMD ["python", "app.py"]
-
 FROM python:3.6.1
 RUN groupadd flaskgroup && useradd -m -g flaskgroup -s /bin/bash flask
 RUN mkdir /usr/src/app/
