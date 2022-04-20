@@ -60,7 +60,7 @@ def dateData(inputPoint, inputDate):
         if dateValidation(inputDate):
             return jsonify({
                 'title': 'TURNOVER BY AGE AND GENDER',
-                'data': model.elem1(conn(), inputPoint, inputDate)
+                'data': model.dateData(conn(), inputPoint, inputDate)
             })
         else:
             return wrongDateErr
