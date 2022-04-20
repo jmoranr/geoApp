@@ -44,7 +44,7 @@ entrypoints in the app where you can get the data:
 - Function to get the time serie of the turnovers of a postal_code given its coordinates,
     a starting date and a ending date. Example:
     ```
-        /-3.83 40.39/2015-04-01 2015-09-01/
+        /-3.83 40.39/ts2015-04-01 2015-09-01/
     ```
 
 Many validation and error handling could be added here to make the app more robust but 
