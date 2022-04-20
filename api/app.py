@@ -1,3 +1,4 @@
+from crypt import methods
 import os
 from flask import Flask, jsonify
 import model
@@ -6,12 +7,16 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+
 # Error messages and pattern matchings
+
 wrongPointErr = "Request bad formed. Please try to enter a geometry that follows this pattern: '-3.83 40.39' (long lat)"
 pointPattern = re.compile("^(-?[0-9]+.?[0-9]+ -?[0-9]+.?[0-9]+)+$")
 wrongDateErr = "Request bad formed. Please try to enter a date that follows this pattern: '2015-03-16' (yyyy-mm-dd)"
 datePattern = re.compile("^([0-9]+-?)+$")
 
+
+# Global actions
 
 def conn():
     conndb = model.connect()
@@ -41,13 +46,14 @@ def dateValidation(inputDate):
         return True
 
 
+# Entrypoints routing
+
 @app.route('/', methods=['GET'])
 def welcome():
     if conn():
         return jsonify({'status': 'Database connection successfully'})
     else:
         return jsonify({'status': 'Database connection error'})
-
 
 @app.route('/<inputPoint>/<inputDate>/', methods=['GET'])
 def dateData(inputPoint, inputDate):
@@ -62,11 +68,22 @@ def dateData(inputPoint, inputDate):
     else:
         return wrongPointErr
     
-    
-
-
-
-
+@app.route('/<inputPoint>/ts<inputDate>/', methods=['GET'])
+def timeSeries(inputPoint, inputDate):
+    if pointValidation(inputPoint):
+        startDate, endDate = inputDate.split()
+        if dateValidation(startDate):
+            if dateValidation(endDate):
+                return jsonify({
+                    'title': 'TIME SERIES',
+                    'data': model.timeSeries(conn(), inputPoint, startDate, endDate)
+                })
+            else:
+                return wrongDateErr
+        else:
+            return wrongDateErr
+    else:
+        return wrongPointErr
 
 
 app.run(host='0.0.0.0', port=os.getenv('PORT'))
